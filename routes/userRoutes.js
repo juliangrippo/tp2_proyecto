@@ -5,7 +5,7 @@ const userControllers = new UserControllers();
 
 const userRoutes = Router();
 
-userRoutes.get("/", userControllers.getAllUsersControllers.bind(userControllers));
+userRoutes.get("/", userControllers.getAllUsersControllers);
 userRoutes.get("/:id", userControllers.getUserControllersById);
 userRoutes.post("/", userControllers.createUserControllers);
 userRoutes.put("/:id", userControllers.updateUserControllers);

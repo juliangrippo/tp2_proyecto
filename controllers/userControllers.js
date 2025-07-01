@@ -1,54 +1,66 @@
 import UserServices from "../services/UserServices.js";
 
 class UserControllers {
-    UserServices = new UserServices();
-    
-    getAllUsersControllers = (req, res) => {
-        const users = this.userServices.getAllUsersService();
-        res.status(200).send({
-        success: true,
-        message: users,
-        });
-    };
+  userServices = new UserServices();
 
-  getUserControllersById = (req, res) => {
+  getAllUsersControllers = async (req, res) => {
+    const users = await this.userServices.getAllUsersService();
+    res.status(200).send({
+      success: true,
+      message: users,
+    });
+  };
+
+  getUserControllersById = async (req, res) => {
+  try {
     const { id } = req.params;
-    const user = this.userServices.getUserServiceById(id);
+    const user = await this.userServices.getUserServiceById(id);
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     res.status(200).send({
       success: true,
       message: user,
     });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: error.message,
+    });
+    }
   };
 
-  createUserControllers = (req, res) => {
-    const newUser = req.body;
-    const user = this.userServices.createUserService(newUser);
-    res.status(201).send({
-      success: true,
-      message: "User created successfully",
-      data: user,
-    });
+  createUserControllers = async (req, res) => {
+    try {
+      const { name, mail, pass } = req.body;
+      const user = await this.userServices.createUserService({
+        name,
+        mail,
+        pass,
+      });
+      res.status(200).send({
+        success: true,
+        message: user,
+      });
+    } catch (error) {
+      res.status(400).send({
+        success: false,
+        message: error.message,
+      });
+    }
   };
-
-  updateUserControllers = (req, res) => {
-    const { id } = req.params;
-    const updateData = req.body;
-    const updatedUser = this.userServices.updateUserService(id, updateData);
-    res.status(200).send({
-      success: true,
-      message: "User updated successfully",
-      data: updatedUser,
-    });
-  };
-
-  deleteUserControllers = (req, res) => {
-    const { id } = req.params;
-    const result = this.userServices.deleteUserService(id);
-    res.status(200).send({
-      success: true,
-      message: result,
-    });
-  };
+  updateUserControllers(req, res) {
+    res.status(200).send("updateUserControllers");
+  }
+  deleteUserControllers(req, res) {
+    res.status(200).send("deleteUserControllers");
+  }
 }
+
 
 export default UserControllers;

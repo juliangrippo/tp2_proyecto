@@ -37,11 +37,12 @@ class UserControllers {
 
   createUserControllers = async (req, res) => {
     try {
-      const { name, mail, pass } = req.body;
+      const { name, mail, pass, roleId } = req.body;
       const user = await this.userServices.createUserService({
         name,
         mail,
         pass,
+        roleId
       });
       res.status(200).send({
         success: true,

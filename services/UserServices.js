@@ -1,4 +1,5 @@
 import { User } from "../models/index.js";
+import { generateToken } from "../utils/jwt.js";  
 
 class UserServices {
   getAllUsersService = async () => {
@@ -14,6 +15,26 @@ class UserServices {
     const { id, name } = await User.create(data);
     return { id, name };
   };
+
+  login = async (data) => {
+      const { mail, pass } = data;
+      const user = await User.findOne({
+        where: { mail },
+      });
+      if (!user) throw new Error("User not found");
+      const comparePass = await user.compare(pass);
+      if (!comparePass) throw new Error("User not found");
+
+      const payload = {
+        id: user.id,
+        name: user.name,
+      };
+
+      const token= generateToken(payload)
+      //return (user,comparePass);
+      return token;
+  };
+
 }
 
 export default UserServices;

@@ -23,4 +23,17 @@ Brand.hasMany(Car, {
   as: "cars",
 });
 
+Car.belongsTo(User, {
+  foreignKey: {
+    name: "userId",
+    allowNull: true,
+  },
+  as: "owner",
+});
+
+User.hasMany(Car, {
+  foreignKey: "userId",
+  as: "cars",
+});
+
 export {User, Role, Car, Brand}

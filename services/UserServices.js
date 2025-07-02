@@ -1,5 +1,5 @@
 import { User } from "../models/index.js";
-import { generateToken } from "../utils/jwt.js";  
+import { generateToken, verifyToken } from "../utils/jwt.js";  
 
 class UserServices {
   getAllUsersService = async () => {
@@ -34,6 +34,11 @@ class UserServices {
       //return (user,comparePass);
       return token;
   };
+
+   me=async (token) => {
+    const user= verifyToken(token)
+    return user
+  }
 
 }
 

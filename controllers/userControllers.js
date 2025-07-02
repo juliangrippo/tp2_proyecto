@@ -35,24 +35,6 @@ class UserControllers {
     }
   };
 
-  login = async (req, res) => {
-    try {
-      const { mail, pass } = req.body;
-      const token = await this.userServices.login({ mail, pass });
-      res.cookie("login", token);
-      res.status(200).send({
-        success: true,
-        message: "logged",
-      });
-    } catch (error) {
-      res.status(400).send({
-        success: false,
-        message: error.message,
-      });
-    }
-  };
-
-
   createUserControllers = async (req, res) => {
     try {
       const { name, mail, pass, roleId } = req.body;
@@ -73,6 +55,40 @@ class UserControllers {
       });
     }
   };
+
+  login = async (req, res) => {
+    try {
+      const { mail, pass } = req.body;
+      const token = await this.userServices.login({ mail, pass });
+      res.cookie("login", token);
+      res.status(200).send({
+        success: true,
+        message: "logged",
+      });
+    } catch (error) {
+      res.status(400).send({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  me = async (req, res) => {
+    try {
+      const {login}=req.cookies
+      const user=  await this.userServices.me(login)
+      res.status(200).send({
+        success: true,
+        message: user,
+      });
+    } catch (error) {
+      res.status(400).send({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+  
   updateUserControllers(req, res) {
     res.status(200).send("updateUserControllers");
   }

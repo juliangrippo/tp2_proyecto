@@ -1,21 +1,19 @@
-import {Router} from "express";
+import { Router } from "express";
+import RoleControllers from "../controllers/roleControllers.js";
+import auth from "../middlewares/auth.js";
+import { adminOnly } from "../middlewares/adminOnly.js";
+
 
 const rolesRoutes = Router();
+const roleControllers = new RoleControllers();
 
-rolesRoutes.get("/",(req, res)=>{
-     res.status(200).send("get all roles routes")
-})
-rolesRoutes.get("/:id",(req, res)=>{
-     res.status(200).send("get roles routes by id")
-})
-rolesRoutes.post("/",(req, res)=>{
-     res.status(200).send("create roles routes")
-})
-rolesRoutes.put("/:id",(req, res)=>{
-     res.status(200).send("update roles routes")
-})
-rolesRoutes.delete("/:id",(req, res)=>{
-     res.status(200).send("delete roles routes")
-})
+
+rolesRoutes.get("/", roleControllers.getAllRoles);
+rolesRoutes.get("/:id", roleControllers.getRoleById);
+
+rolesRoutes.post("/", auth, adminOnly, roleControllers.createRole);
+rolesRoutes.put("/:id", auth, adminOnly, roleControllers.updateRole);
+rolesRoutes.delete("/:id", auth, adminOnly, roleControllers.deleteRole);
+
 
 export default rolesRoutes;

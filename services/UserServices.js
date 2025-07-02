@@ -31,7 +31,6 @@ class UserServices {
       };
 
       const token= generateToken(payload)
-      //return (user,comparePass);
       return token;
   };
 

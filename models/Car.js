@@ -30,6 +30,22 @@ Car.init(
       type: DataTypes.STRING(20),
       allowNull: false,
     },
+    brandId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Brands",
+        key: "id",
+      },
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "Users",
+        key: "id",
+      },
+    },
   },
   {
     sequelize: connection,

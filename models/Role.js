@@ -9,6 +9,13 @@ Role.init(
       type: DataTypes.STRING,
       allowNull:false,
       defaultValue: "user",
+      validate: {
+        is: {
+          isInt: true,
+          min: 1800,
+          msg: "El nombre del rol solo puede contener letras y espacios.",
+        }
+      },
     },
   },
   {

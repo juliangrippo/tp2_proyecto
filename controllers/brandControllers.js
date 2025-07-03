@@ -5,9 +5,17 @@ class BrandControllers {
 
   getAllBrandsControllers = async (req, res) => {
     const brands = await this.brandServices.getAllBrands();
+
+    const brandsData = brands.map((brand) => ({
+      name: brand.name,
+      country: brand.country,
+      foundedYear: brand.foundedYear,
+      description: brand.description,
+    }));
+
     res.status(200).send({
       success: true,
-      message: brands,
+      message: brandsData,
     });
   };
 
@@ -38,6 +46,7 @@ class BrandControllers {
   createBrandControllers = async (req, res) => {
     try {
       const { name, country, foundedYear, description } = req.body;
+
 
       const brand = await this.brandServices.createBrand({
         name,

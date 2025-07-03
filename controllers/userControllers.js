@@ -1,13 +1,33 @@
 import UserServices from "../services/UserServices.js";
+import { Role } from "../models/index.js";
+
 
 class UserControllers {
   userServices = new UserServices();
 
   getAllUsersControllers = async (req, res) => {
     const users = await this.userServices.getAllUsersService();
+
+    // const usersData = users.map((user) => ({
+    //   name: user.name,
+    //   mail: user.mail
+    // }));
+
+    const usersData = await Promise.all(
+          users.map(async (user) => {
+            const role = await Role.findByPk(user.roleId);
+            return {
+              name: user.name,
+              mail: user.mail,
+              Rol: role?.roleName ?? "Unknown", 
+            };
+          })
+        );
+
+
     res.status(200).send({
       success: true,
-      message: users,
+      message: usersData,
     });
   };
 

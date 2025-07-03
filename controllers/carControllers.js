@@ -1,4 +1,6 @@
 import CarServices from "../services/CarServices.js";
+import { Brand } from "../models/index.js";
+import { User } from "../models/index.js";
 
 class CarControllers {
   carServices = new CarServices();
@@ -6,9 +8,27 @@ class CarControllers {
   getAllCarsControllers = async (req, res) => {
     try {
       const cars = await this.carServices.getAllCarsService();
+
+       const carsData = await Promise.all(
+          cars.map(async (car) => {
+            const brand = await Brand.findByPk(car.brandId);
+            const user = await User.findByPk(car.userId);
+            return {
+              model: car.model,
+              year: car.year,
+              color: car.color,
+              plate: car.plate,
+              engineType: car.engineType,
+              transmission: car.transmission,
+              brand: brand?.name ?? "Unknown", 
+              user: user?.name ?? "Unknown",
+            };
+          })
+        );
+
       res.status(200).send({
         success: true,
-        message: cars,
+        message: carsData,
       });
     } catch (error) {
       res.status(500).send({
